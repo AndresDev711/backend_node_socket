@@ -9,15 +9,19 @@ import {
   ORIGIN_LOCALHOST_POSTMAN,
 } from "./core/config/cors.config.js";
 
+const whitelist = [ORIGIN_LOCALHOST_ADMIN, ORIGIN_LOCALHOST_POSTMAN];
+
 const app = express();
 const server = http.createServer(app);
-const io = new SocketServer(server);
+const io = new SocketServer(server, {
+  cors: {
+    origin: ORIGIN_LOCALHOST_POSTMAN,
+    ORIGIN_LOCALHOST_ADMIN,
+  },
+});
 
 app.use(express.json());
 app.use(morgan("dev"));
-
-const whitelist = [ORIGIN_LOCALHOST_ADMIN, ORIGIN_LOCALHOST_POSTMAN];
-
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -38,4 +42,8 @@ app.use((req, res, next) => {
   });
 });
 
-export default app;
+io.on("connection", ()=>{
+  console.log("a user conected")
+})
+
+export default server;
