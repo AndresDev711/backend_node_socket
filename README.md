@@ -1,0 +1,2 @@
+# backend_node_socket
+PRACTICING SOCKETS WITH NODE18 AND SOCKETS.IO
